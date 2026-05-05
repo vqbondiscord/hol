@@ -750,19 +750,37 @@ function library:CreateWindow(name, size, hidebutton)
 function sector:AddImage(imageId, size)
     local img = {}
 
-    img.Main = Instance.new("ImageLabel", sector.Items)
+    -- Wrapper frame that the layout controls
+    local wrapper = Instance.new("Frame", sector.Items)
+    wrapper.Name = "ImageWrapper"
+    wrapper.BackgroundTransparency = 1
+    wrapper.BorderSizePixel = 0
+    wrapper.Size = size or UDim2.fromOffset(100, 100)
+    wrapper.ZIndex = 6
+    wrapper.ClipsDescendants = false -- allow rotation to show outside if needed
+
+    -- Actual image inside wrapper
+    img.Main = Instance.new("ImageLabel", wrapper)
     img.Main.Name = "Image"
     img.Main.BackgroundTransparency = 1
     img.Main.BorderSizePixel = 0
-    img.Main.Size = size or UDim2.fromOffset(100, 100)
-
+    img.Main.Size = UDim2.fromScale(1, 1) -- fill the wrapper
+    img.Main.Position = UDim2.fromScale(0, 0)
+    img.Main.AnchorPoint = Vector2.new(0.5, 0.5) -- rotate around center
+    img.Main.Position = UDim2.fromScale(0.5, 0.5) -- center inside wrapper
+    img.Main.Size = UDim2.fromScale(1, 1)
     img.Main.Image = imageId or ""
     img.Main.ScaleType = Enum.ScaleType.Fit
     img.Main.ZIndex = 6
 
-    -- ✅ rotation function
+    img.Wrapper = wrapper
+
     function img:SetRotation(deg)
         img.Main.Rotation = deg
+    end
+
+    function img:SetSize(newSize)
+        wrapper.Size = newSize
     end
 
     function img:Set(newId)
@@ -771,8 +789,7 @@ function sector:AddImage(imageId, size)
 
     sector:FixSize()
     return img
-end
-            function sector:AddLabel(text)
+end            function sector:AddLabel(text)
                 local label = { }
 
                 label.Main = Instance.new("TextLabel", sector.Items)

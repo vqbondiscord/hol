@@ -756,11 +756,11 @@ function sector:AddImage(imageId, size)
     img.Main.BorderSizePixel = 0
     img.Main.Size = size or UDim2.fromOffset(100, 100)
 
-    -- FIXES ↓↓↓
     img.Main.Image = imageId or ""
     img.Main.ScaleType = Enum.ScaleType.Fit
     img.Main.ImageTransparency = 0
     img.Main.Visible = true
+    img.Main.ZIndex = 6
 
     function img:Set(newId)
         img.Main.Image = newId

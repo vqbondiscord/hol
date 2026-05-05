@@ -758,9 +758,12 @@ function sector:AddImage(imageId, size)
 
     img.Main.Image = imageId or ""
     img.Main.ScaleType = Enum.ScaleType.Fit
-    img.Main.ImageTransparency = 0
-    img.Main.Visible = true
     img.Main.ZIndex = 6
+
+    -- ✅ rotation function
+    function img:SetRotation(deg)
+        img.Main.Rotation = deg
+    end
 
     function img:Set(newId)
         img.Main.Image = newId

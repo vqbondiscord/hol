@@ -750,20 +750,19 @@ function library:CreateWindow(name, size, hidebutton)
 function sector:AddImage(imageId, size)
     local img = {}
 
-    img.Main = Instance.new("ImageLabel")
-    img.Main.Parent = sector.Items
+    img.Main = Instance.new("ImageLabel", sector.Items)
+    img.Main.Name = "Image"
     img.Main.BackgroundTransparency = 1
+    img.Main.BorderSizePixel = 0
     img.Main.Size = size or UDim2.fromOffset(100, 100)
-    img.Main.Image = imageId or ""
-    
-    -- Essential for predictable rotation:
-    img.Main.AnchorPoint = Vector2.new(0.5, 0.5) 
-    img.Main.ZIndex = 10 
 
+    img.Main.Image = imageId or ""
+    img.Main.ScaleType = Enum.ScaleType.Fit
+    img.Main.ZIndex = 6
+
+    -- ✅ rotation function
     function img:SetRotation(deg)
-        -- We use a small check to ensure the value is a number
-        local angle = tonumber(deg) or 0
-        img.Main.Rotation = angle
+        img.Main.Rotation = deg
     end
 
     function img:Set(newId)
@@ -772,7 +771,8 @@ function sector:AddImage(imageId, size)
 
     sector:FixSize()
     return img
-end            function sector:AddLabel(text)
+end
+            function sector:AddLabel(text)
                 local label = { }
 
                 label.Main = Instance.new("TextLabel", sector.Items)
